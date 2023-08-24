@@ -18,7 +18,10 @@ WebUI automation test example project with Selenium
 - Install `Maven`
 - Install `Java SE`
 - Clone this repository
-- Download `Webdriver` if the webdriver that provided doesn't support your Browser / Operating System, put and replace the webdriver in `resources/webdriver` directory
+- Make sure the browsers are installed in the local machine. \
+This project support to run in `chrome | edge | firefox | safari`. \
+For Safari, you need to enable the webdriver by the following command `safaridriver --enable`.
+
 
 ---
 

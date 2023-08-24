@@ -8,6 +8,7 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
+import com.example.helper.Variable;
 import com.example.helper.WebdriverManager;
 
 public class Hooks {
@@ -15,7 +16,7 @@ public class Hooks {
      
     @Before
     public void setup() {
-        String browser = "edge";
+        String browser = Variable.BROWSER;
         driver = WebdriverManager.getDriver(browser);
         driver.manage().window().maximize();
     }
