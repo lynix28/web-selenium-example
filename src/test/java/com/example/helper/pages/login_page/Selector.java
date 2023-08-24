@@ -26,4 +26,8 @@ public class Selector {
     public By loginButton() {
         return By.id("login-button");
     }
+
+    public By loginErrorMessage() {
+        return By.xpath("//*[@id=\"login_button_container\"]/div/form/div[3]");
+    }
 }

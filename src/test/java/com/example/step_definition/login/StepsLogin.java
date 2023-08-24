@@ -2,8 +2,8 @@ package com.example.step_definition.login;
 
 import org.openqa.selenium.WebDriver;
 
-import com.example.helper.Variable;
 import com.example.helper.WebdriverManager;
+import com.example.helper.pages.login_page.AssertData;
 import com.example.helper.pages.login_page.LoginPage;
 import com.example.helper.pages.product_page.ProductPage;
 
@@ -14,8 +14,8 @@ import io.cucumber.java.en.When;
 import static org.testng.Assert.assertEquals;
 
 public class StepsLogin {
-    private WebDriver driver = WebdriverManager.getDriver(Variable.BROWSER);
-    private String URL = Variable.BASE_URL;
+    private WebDriver driver = WebdriverManager.getDriver(System.getProperty("browser"));
+    private String URL = System.getProperty("baseUrl");
     private LoginPage loginPage = new LoginPage(driver);
     private ProductPage productPage = new ProductPage(driver);
 
@@ -46,5 +46,19 @@ public class StepsLogin {
 
         assertEquals(result, true);
         assertEquals(text, "Products");
+    }
+
+    @Then("I see an error message about invalid credential")
+    public void checkErrorInvalidAccount() throws InterruptedException {
+        String errorText = loginPage.checkErrorMessage();
+
+        assertEquals(errorText, AssertData.InvalidAccountErrorMessage);
+    }
+
+    @Then("I see an error message about blocked credential")
+    public void checkErrorBlockedAccount() throws InterruptedException {
+        String errorText = loginPage.checkErrorMessage();
+
+        assertEquals(errorText, AssertData.BlockedAccountErrorMessage);
     }
 }

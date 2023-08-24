@@ -1,15 +1,15 @@
 ## web-selenium-example
 
-WebUI automation test example project with Selenium
+WebUI automation test example project with Selenium.
 
 ---
 
 <b>Tools:</b>
 
-- Cucumber-TestNG as test framework and assertion
-- Maven as test builder and runner
-- Selenium as webdriver client
-- Allure as test reporter
+- Cucumber-TestNG as test framework and assertion.
+- Maven as test builder and runner.
+- Selenium as webdriver client.
+- Allure as test reporter.
 
 ---
 
@@ -18,6 +18,7 @@ WebUI automation test example project with Selenium
 - Install `Maven`
 - Install `Java SE`
 - Clone this repository
+- Download the webdriver and save the file inside `webdriver` directory (you need to create the directory inside the root project)
 - Make sure the browsers are installed in the local machine. \
 This project support to run in `chrome | edge | firefox | safari`. \
 For Safari, you need to enable the webdriver by the following command `safaridriver --enable`.
@@ -25,11 +26,16 @@ For Safari, you need to enable the webdriver by the following command `safaridri
 
 ---
 
-<b>How to run:</b>
+<b>How to run the test:</b>
 
 <!-- - For all tests -->
 
-   - execute `mvn test`
+   - `mvn test` | to run the test with default settings (Brower = Chrome - Headless = False).
+   - `mvn test -Dbrowser=edge` | to run the test with another web browser.
+   - `mvn test -Dheadless=true` | to run the test in HEADLESS mode.
+   - `mvn test -Dbrowser=edge -Dheadless=true` | to run the test in another web browser and in HEADLESS mode.
+   - `mvn test -Dtestname=SmokeTest` | to run the test only for the specific test suite.
+   - `mvn test -Dtest=RunnerLogin` | to run the test only for the specific test runner class / file.
 
 <!-- - For specific feature using tags
 

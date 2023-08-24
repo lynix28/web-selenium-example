@@ -1,8 +1,21 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!-- <suite name="MyTestSuite" parallel="methods" thread-count="3"> -->
 <suite name="MyTestSuite">
-    <test name="MyTest">
+    <test name="LoginFeature">
         <classes>
-            <class name="com.example.runner.login.RunnerLogin" />
+            <class name="com.example.runner.feature.login.RunnerLogin" />
+        </classes>
+    </test>
+
+    <test name="SmokeTest">
+        <classes>
+            <class name="com.example.runner.smoke_test.RunnerSmokeTest" />
+        </classes>
+    </test>
+
+    <test name="RegressionTest">
+        <classes>
+            <class name="com.example.runner.regression_test.RunnerRegressionTest" />
         </classes>
     </test>
 </suite>

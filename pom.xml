@@ -11,6 +11,11 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <base.url>https://www.saucedemo.com</base.url>
+        <browser.name>edge</browser.name>
+        <is.headless>false</is.headless>
+        <suite.directory>src/test/resources/config/testng.xml</suite.directory>
+        <testname>RegressionTest</testname>
     </properties>
 
     <dependencies>
@@ -53,12 +58,23 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
+                    <parallel>tests</parallel>
+                    <threadCount>2</threadCount>
                     <systemPropertyVariables>
                         <allure.results.directory>target/allure-results</allure.results.directory>
+                        <baseUrl>${base.url}</baseUrl>
+                        <browser>${browser.name}</browser>
+                        <headless>${is.headless}</headless>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/config/testng.xml</suiteXmlFile>
+                        <suiteXmlFile>${suite.directory}</suiteXmlFile>
                     </suiteXmlFiles>
+                    <properties>
+                        <property>
+                            <name>testnames</name>
+                            <value>${testname}</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
             <plugin>
@@ -71,5 +87,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

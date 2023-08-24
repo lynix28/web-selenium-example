@@ -46,4 +46,11 @@ public class LoginPage {
         WebElement loginButton = wait.until(ExpectedConditions.presenceOfElementLocated(selector.loginButton()));
         loginButton.click();
     }
+
+    public String checkErrorMessage() {
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(selector.loginErrorMessage()));
+        String errorText = errorMessage.getText();
+
+        return errorText;
+    }
 }
