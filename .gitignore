@@ -1,4 +1,4 @@
 .vscode
 target/
 .allure
-webdriver/
+webdriver/*driver

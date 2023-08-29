@@ -15,7 +15,7 @@
         <browser.name>edge</browser.name>
         <is.headless>false</is.headless>
         <suite.directory>src/test/resources/config/testng.xml</suite.directory>
-        <testname>RegressionTest</testname>
+        <suite>RegressionTest</suite>
     </properties>
 
     <dependencies>
@@ -59,7 +59,7 @@
                 <version>3.1.2</version>
                 <configuration>
                     <parallel>tests</parallel>
-                    <threadCount>2</threadCount>
+                    <threadCount>3</threadCount>
                     <systemPropertyVariables>
                         <allure.results.directory>target/allure-results</allure.results.directory>
                         <baseUrl>${base.url}</baseUrl>
@@ -72,7 +72,7 @@
                     <properties>
                         <property>
                             <name>testnames</name>
-                            <value>${testname}</value>
+                            <value>${suite}</value>
                         </property>
                     </properties>
                 </configuration>

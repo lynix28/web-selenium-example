@@ -34,7 +34,7 @@ For Safari, you need to enable the webdriver by the following command `safaridri
    - `mvn test -Dbrowser=edge` | to run the test with another web browser.
    - `mvn test -Dheadless=true` | to run the test in HEADLESS mode.
    - `mvn test -Dbrowser=edge -Dheadless=true` | to run the test in another web browser and in HEADLESS mode.
-   - `mvn test -Dtestname=SmokeTest` | to run the test only for the specific test suite.
+   - `mvn test -Dsuite=SmokeTest` | to run the test only for the specific test suite.
    - `mvn test -Dtest=RunnerLogin` | to run the test only for the specific test runner class / file.
 
 <!-- - For specific feature using tags
