@@ -1,6 +1,8 @@
 package com.example.helper;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -9,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 public class WebdriverManager {
@@ -28,6 +31,7 @@ public class WebdriverManager {
 
     public static WebDriver getDriver(String browser) {
         if (driver == null) {
+            String seleniumHost = System.getProperty("host");
             if ("edge".equalsIgnoreCase(browser)) {
                 String driverBaseName = "msedgedriver";
                 String driverPath = findDriverPath(driverBaseName);
@@ -36,6 +40,15 @@ public class WebdriverManager {
 
                 if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
                     options.addArguments("--headless");
+
+                    if ("true".equalsIgnoreCase(System.getProperty("remote"))) {
+                        options.setCapability("browserName", "MicrosoftEdge");
+                        try {
+                            driver = new RemoteWebDriver(new URL(seleniumHost + ":4444"), options);
+                        } catch (MalformedURLException e) {
+                            System.out.println("Invalid URL");
+                        }
+                    }
                     driver = new EdgeDriver(options);
                 } else {
                     driver = new EdgeDriver(options);
