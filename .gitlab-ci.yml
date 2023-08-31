@@ -1,0 +1,21 @@
+stages:          # List of stages for jobs, and their order of execution
+  - test
+
+test-job:
+    stage: test
+    only: 
+        - master
+    image: docker:latest
+    services:
+        - docker:dind
+    script:
+        - docker network create testnetwork
+        - docker run --name "selenium-edge" -d --network testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-edge:115.0
+        - docker run -it --name "maven" --network testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dsuite=RegressionTest -Dheadless=true -Dremote=true -Dhost=http://selenium-edge
+        - docker cp maven:/app/target/allure-results/ .
+        - tar -czf test-result.tar.gz target/allure-results/
+    artifacts:
+        paths:
+        - "test-result.tar.gz"
+        when: always
+        expire_in: "30 days"
