@@ -1,5 +1,7 @@
 ## web-selenium-example
 
+<a href="https://gitlab.com/lynix28/web-selenium-example/-/pipelines"><img alt="pipeline status" src="https://gitlab.com/lynix28/web-selenium-example/badges/master/pipeline.svg" /></a>
+
 WebUI automation test example project with Selenium.
 
 ---
