@@ -12,8 +12,10 @@ test-job:
         - docker network create testnetwork
         - docker run --name "selenium-edge" -d --network=testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-edge:114.0
         - HOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' selenium-edge`
-        - docker run --name "maven" --rm --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dsuite=RegressionTest -Dheadless=true -Dremote=true -Dhost=$HOST
+        - docker run --name "maven" --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dsuite=RegressionTest -Dheadless=true -Dremote=true -Dhost=$HOST
         - docker cp maven:/app/target/allure-results/ .
+        - docker stop selenium-edge && docker rm selenium-edge
+        - docker stop maven && docker rm maven
         - tar -czf test-result.tar.gz target/allure-results/
     artifacts:
         paths:
