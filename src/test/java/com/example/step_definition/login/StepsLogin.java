@@ -14,7 +14,7 @@ import io.cucumber.java.en.When;
 import static org.testng.Assert.assertEquals;
 
 public class StepsLogin {
-    private WebDriver driver = WebdriverManager.getDriver(System.getProperty("browser"));
+    private WebDriver driver = WebdriverManager.driver;
     private String URL = System.getProperty("baseUrl");
     private LoginPage loginPage = new LoginPage(driver);
     private ProductPage productPage = new ProductPage(driver);

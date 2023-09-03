@@ -15,7 +15,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 public class WebdriverManager {
-    private static WebDriver driver;
+    public static WebDriver driver;
 
     private static String findDriverPath(String baseName) {
         File driverDirectory = new File("./webdriver/");
@@ -29,71 +29,66 @@ public class WebdriverManager {
         return null;
     }
 
-    public static WebDriver getDriver(String browser) {
-        if (driver == null) {
-            String seleniumHost = System.getProperty("host");
-            if ("edge".equalsIgnoreCase(browser)) {
-                String driverBaseName = "msedgedriver";
-                String driverPath = findDriverPath(driverBaseName);
-                System.setProperty("webdriver.edge.driver", driverPath);
-                EdgeOptions options = new EdgeOptions();
+    public static WebDriver setDriver(String browser) {
+        String seleniumHost = System.getProperty("host");
+        if ("edge".equalsIgnoreCase(browser)) {
+            String driverBaseName = "msedgedriver";
+            String driverPath = findDriverPath(driverBaseName);
+            System.setProperty("webdriver.edge.driver", driverPath);
+            EdgeOptions options = new EdgeOptions();
 
-                if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
-                    options.addArguments("--headless");
+            if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
+                options.addArguments("--headless");
 
-                    if ("true".equalsIgnoreCase(System.getProperty("remote"))) {
-                        options.setCapability("browserName", "MicrosoftEdge");
-                        try {
-                            driver = new RemoteWebDriver(new URL(seleniumHost + ":4444"), options);
-                        } catch (MalformedURLException e) {
-                            System.out.println("Invalid URL");
-                        }
+                if ("true".equalsIgnoreCase(System.getProperty("remote"))) {
+                    try {
+                        return driver = new RemoteWebDriver(new URL("http://" + seleniumHost + ":4444"), options);
+                    } catch (MalformedURLException e) {
+                        System.out.println("Invalid URL");
                     }
-                    driver = new EdgeDriver(options);
-                } else {
-                    driver = new EdgeDriver(options);
                 }
-            } else if ("chrome".equalsIgnoreCase(browser)) {
-                String driverBaseName = "chromedriver";
-                String driverPath = findDriverPath(driverBaseName);
-                System.setProperty("webdriver.chrome.driver", driverPath);
-                ChromeOptions options = new ChromeOptions();
-
-                if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
-                    options.addArguments("--headless");
-                    driver = new ChromeDriver(options);
-                } else {
-                    driver = new ChromeDriver(options);
-                }
-            } else if ("firefox".equalsIgnoreCase(browser)) {
-                String driverBaseName = "geckodriver";
-                String driverPath = findDriverPath(driverBaseName);
-                System.setProperty("webdriver.gekko.driver", driverPath);
-                FirefoxOptions options = new FirefoxOptions();
-
-                if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
-                    options.addArguments("-headless");
-                    driver = new FirefoxDriver(options);
-                } else {
-                    driver = new FirefoxDriver(options);
-                }
-            } else if ("safari".equalsIgnoreCase(browser)) {
-                if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
-                    throw new IllegalArgumentException(browser + " cannot run in HEADLESS");
-                } else {
-                    driver = new SafariDriver();
-                }
+                return driver = new EdgeDriver(options);
             } else {
-                throw new IllegalArgumentException("Invalid browser name: " + browser);
+                return driver = new EdgeDriver(options);
             }
+        } else if ("chrome".equalsIgnoreCase(browser)) {
+            String driverBaseName = "chromedriver";
+            String driverPath = findDriverPath(driverBaseName);
+            System.setProperty("webdriver.chrome.driver", driverPath);
+            ChromeOptions options = new ChromeOptions();
+
+            if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
+                options.addArguments("--headless");
+                return driver = new ChromeDriver(options);
+            } else {
+                return driver = new ChromeDriver(options);
+            }
+        } else if ("firefox".equalsIgnoreCase(browser)) {
+            String driverBaseName = "geckodriver";
+            String driverPath = findDriverPath(driverBaseName);
+            System.setProperty("webdriver.gekko.driver", driverPath);
+            FirefoxOptions options = new FirefoxOptions();
+
+            if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
+                options.addArguments("-headless");
+                return driver = new FirefoxDriver(options);
+            } else {
+                return driver = new FirefoxDriver(options);
+            }
+        } else if ("safari".equalsIgnoreCase(browser)) {
+            if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
+                throw new IllegalArgumentException(browser + " cannot run in HEADLESS");
+            } else {
+                return driver = new SafariDriver();
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid browser name: " + browser);
         }
-        return driver;
     }
 
     public static void quitDriver() {
         if (driver != null) {
             driver.quit();
-            driver = null;
         }
     }
 }

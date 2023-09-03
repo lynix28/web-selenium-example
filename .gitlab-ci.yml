@@ -1,4 +1,4 @@
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - test
 
 test-job:
@@ -10,8 +10,9 @@ test-job:
         - docker:dind
     script:
         - docker network create testnetwork
-        - docker run --name "selenium-edge" -d --network testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-edge:115.0
-        - docker run --name "maven" -e "SUITE=RegressionTest" -e "HEADLESS=true" -e "REMOTE=true" -e "HOST=http://selenium-edge" --network testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dsuite=$SUITE -Dheadless=$HEADLESS -Dremote=$REMOTE -Dhost=$HOST
+        - docker run --name "selenium-edge" -d --network=testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-edge:114.0
+        - HOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' selenium-edge`
+        - docker run --name "maven" --rm --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dsuite=RegressionTest -Dheadless=true -Dremote=true -Dhost=$HOST
         - docker cp maven:/app/target/allure-results/ .
         - tar -czf test-result.tar.gz target/allure-results/
     artifacts:

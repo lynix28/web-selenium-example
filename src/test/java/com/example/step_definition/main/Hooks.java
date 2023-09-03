@@ -11,12 +11,12 @@ import io.cucumber.java.Scenario;
 import com.example.helper.WebdriverManager;
 
 public class Hooks {
-    private WebDriver driver;
+    private WebDriver driver = WebdriverManager.setDriver(System.getProperty("browser"));
      
     @Before
-    public void setup() {
-        String browser = System.getProperty("browser");
-        driver = WebdriverManager.getDriver(browser);
+    public void setup(Scenario scenario) {
+        driver = WebdriverManager.driver;
+        System.out.println(driver);
         driver.manage().window().maximize();
     }
      
@@ -33,5 +33,6 @@ public class Hooks {
             e.printStackTrace();
         }
         WebdriverManager.quitDriver();
+        System.out.println(driver);
     }
 }
