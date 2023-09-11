@@ -1,7 +1,7 @@
 stages:
   - test
 
-test-job:
+test-job-edge:
     stage: test
     only: 
         - master
@@ -12,7 +12,7 @@ test-job:
         - docker network create testnetwork
         - docker run --name "selenium-edge" -d --network=testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-edge:114.0
         - HOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' selenium-edge`
-        - docker run --name "maven" --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dsuite=RegressionTest -Dheadless=true -Dremote=true -Dhost=$HOST
+        - docker run --name "maven" --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dheadless=true -Dremote=true -Dhost=$HOST
         - docker cp maven:/app/target/allure-results/ .
         - docker stop selenium-edge && docker rm selenium-edge
         - docker stop maven && docker rm maven
@@ -21,4 +21,48 @@ test-job:
         paths:
         - "test-result.tar.gz"
         when: always
-        expire_in: "30 days"
+        expire_in: "7 days"
+
+test-job-chrome:
+    stage: test
+    only: 
+        - master
+    image: docker:latest
+    services:
+        - docker:dind
+    script:
+        - docker network create testnetwork
+        - docker run --name "selenium-chrome" -d --network=testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-chrome:116.0
+        - HOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' selenium-chrome`
+        - docker run --name "maven" --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dbrowser=chrome -Dheadless=true -Dremote=true -Dhost=$HOST
+        - docker cp maven:/app/target/allure-results/ .
+        - docker stop selenium-chrome && docker rm selenium-chrome
+        - docker stop maven && docker rm maven
+        - tar -czf test-result.tar.gz target/allure-results/
+    artifacts:
+        paths:
+        - "test-result.tar.gz"
+        when: always
+        expire_in: "7 days"
+
+test-job-firefox:
+    stage: test
+    only: 
+        - master
+    image: docker:latest
+    services:
+        - docker:dind
+    script:
+        - docker network create testnetwork
+        - docker run --name "selenium-firefox" -d --network=testnetwork -p 4444:4444 --shm-size="2g" selenium/standalone-firefox:117.0
+        - HOST=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' selenium-firefox`
+        - docker run --name "maven" --network=testnetwork -v "$(pwd)":/app -w /app maven:latest mvn test -Dbrowser=firefox -Dheadless=true -Dremote=true -Dhost=$HOST
+        - docker cp maven:/app/target/allure-results/ .
+        - docker stop selenium-firefox && docker rm selenium-firefox
+        - docker stop maven && docker rm maven
+        - tar -czf test-result.tar.gz target/allure-results/
+    artifacts:
+        paths:
+        - "test-result.tar.gz"
+        when: always
+        expire_in: "7 days"

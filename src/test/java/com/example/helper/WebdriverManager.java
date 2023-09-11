@@ -14,6 +14,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 public class WebdriverManager {
     public static WebDriver driver;
 
@@ -34,7 +36,15 @@ public class WebdriverManager {
         if ("edge".equalsIgnoreCase(browser)) {
             String driverBaseName = "msedgedriver";
             String driverPath = findDriverPath(driverBaseName);
-            System.setProperty("webdriver.edge.driver", driverPath);
+            
+            if (driverPath == null) {
+                System.out.println("No local driver found!");
+                System.out.println("Using WDM");
+                WebDriverManager.edgedriver().setup();
+            } else {
+                System.out.println("Local driver found");
+                System.setProperty("webdriver.edge.driver", driverPath);
+            }
             EdgeOptions options = new EdgeOptions();
 
             if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
@@ -54,11 +64,27 @@ public class WebdriverManager {
         } else if ("chrome".equalsIgnoreCase(browser)) {
             String driverBaseName = "chromedriver";
             String driverPath = findDriverPath(driverBaseName);
-            System.setProperty("webdriver.chrome.driver", driverPath);
+
+            if (driverPath == null) {
+                System.out.println("No local driver found!");
+                System.out.println("Using WDM");
+                WebDriverManager.chromedriver().setup();
+            } else {
+                System.out.println("Local driver found");
+                System.setProperty("webdriver.chrome.driver", driverPath);
+            }
             ChromeOptions options = new ChromeOptions();
 
             if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
                 options.addArguments("--headless");
+
+                if ("true".equalsIgnoreCase(System.getProperty("remote"))) {
+                    try {
+                        return driver = new RemoteWebDriver(new URL("http://" + seleniumHost + ":4444"), options);
+                    } catch (MalformedURLException e) {
+                        System.out.println("Invalid URL");
+                    }
+                }
                 return driver = new ChromeDriver(options);
             } else {
                 return driver = new ChromeDriver(options);
@@ -66,11 +92,27 @@ public class WebdriverManager {
         } else if ("firefox".equalsIgnoreCase(browser)) {
             String driverBaseName = "geckodriver";
             String driverPath = findDriverPath(driverBaseName);
-            System.setProperty("webdriver.gekko.driver", driverPath);
+
+            if (driverPath == null) {
+                System.out.println("No local driver found!");
+                System.out.println("Using WDM");
+                WebDriverManager.firefoxdriver().setup();
+            } else {
+                System.out.println("Local driver found");
+                System.setProperty("webdriver.gekko.driver", driverPath);
+            }
             FirefoxOptions options = new FirefoxOptions();
 
             if ("true".equalsIgnoreCase(System.getProperty("headless"))) {
                 options.addArguments("-headless");
+
+                if ("true".equalsIgnoreCase(System.getProperty("remote"))) {
+                    try {
+                        return driver = new RemoteWebDriver(new URL("http://" + seleniumHost + ":4444"), options);
+                    } catch (MalformedURLException e) {
+                        System.out.println("Invalid URL");
+                    }
+                }
                 return driver = new FirefoxDriver(options);
             } else {
                 return driver = new FirefoxDriver(options);
