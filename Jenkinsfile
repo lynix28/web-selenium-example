@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Run Test') {
             steps {
-                sh "docker run --name ${MAVEN_CONTAINER_NAME} --network=testnetwork -v $(pwd):/app -w /app maven:${MAVEN_VERSION} mvn test -Dheadless=true -Dremote=true -Dhost=${env.HOST}"
+                sh "docker run --name '${MAVEN_CONTAINER_NAME}' --network=testnetwork -v $(pwd):/app -w /app maven:${MAVEN_VERSION} mvn test -Dheadless=true -Dremote=true -Dhost=${env.HOST}"
                 sh 'docker cp maven:/app/target/allure-results/ .'
                 sh "docker stop ${SELENIUM_CONTAINER_NAME} && docker rm ${SELENIUM_CONTAINER_NAME}"
                 sh "docker stop ${MAVEN_CONTAINER_NAME} && docker rm ${MAVEN_CONTAINER_NAME}"
