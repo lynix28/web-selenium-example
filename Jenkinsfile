@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:latest'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
     // environment {
     //     SELENIUM_CONTAINER_NAME = 'selenium-edge'
     //     SELENIUM_STANDALONE_VERSION = '114.0'
@@ -28,6 +23,12 @@ pipeline {
         //     }
         // }
         stage('Run Test') {
+            agent {
+                docker {
+                    image 'maven:latest'
+                    args '-v /root/.m2:/root/.m2'
+                }
+            }
             steps {
                 sh 'mvn test -Dheadless=true'
                 // sh "docker run --name ${MAVEN_CONTAINER_NAME} --network=bridge -v $PWD:/app -w /app maven:${MAVEN_VERSION} mvn test -Dheadless=true -Dremote=true -Dhost=${env.HOST}"
