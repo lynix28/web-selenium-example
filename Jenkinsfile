@@ -12,19 +12,10 @@ pipeline {
         MAVEN_VERSION = 'latest'
     }
     stages {
-        stage('Create Test Network') {
-            steps {
-                container('jenkins-docker') {
-                    sh 'docker network create testnetwork'
-                }
-            }
-        }
         stage('Start Selenium Standalone') {
             steps {
-                container('jenkins-docker') {
-                    sh "docker run --name '${SELENIUM_CONTAINER_NAME}' -d --network=testnetwork -p 4444:4444 --shm-size='2g' selenium/standalone-edge:${SELENIUM_STANDALONE_VERSION}"
+                sh "docker run --name '${SELENIUM_CONTAINER_NAME}' -d --network=host -p 4444:4444 --shm-size='2g' selenium/standalone-edge:${SELENIUM_STANDALONE_VERSION}"
                 }
-            }
         }
         stage('Get Selenium Container IP Address') {
             steps {
