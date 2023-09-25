@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Start Selenium Standalone') {
             steps {
-                sh "docker run --name '${SELENIUM_CONTAINER_NAME}' -d --network=host -p 4444:4444 --shm-size='2g' selenium/standalone-edge:${SELENIUM_STANDALONE_VERSION}"
+                sh "docker run --name '${SELENIUM_CONTAINER_NAME}' -d --network=bridge -p 4444:4444 --shm-size='2g' selenium/standalone-edge:${SELENIUM_STANDALONE_VERSION}"
                 }
         }
         stage('Get Selenium Container IP Address') {
@@ -30,7 +30,7 @@ pipeline {
         stage('Run Test') {
             steps {
                 container('jenkins-docker') {
-                    sh "docker run --name ${MAVEN_CONTAINER_NAME} --network=testnetwork -v $PWD:/app -w /app maven:${MAVEN_VERSION} mvn test -Dheadless=true -Dremote=true -Dhost=${env.HOST}"
+                    sh "docker run --name ${MAVEN_CONTAINER_NAME} --network=bridge -v $PWD:/app -w /app maven:${MAVEN_VERSION} mvn test -Dheadless=true -Dremote=true -Dhost=${env.HOST}"
                     sh 'docker cp maven:/app/target/allure-results/ .'
                     sh "docker stop ${SELENIUM_CONTAINER_NAME} && docker rm ${SELENIUM_CONTAINER_NAME}"
                     sh "docker stop ${MAVEN_CONTAINER_NAME} && docker rm ${MAVEN_CONTAINER_NAME}"
